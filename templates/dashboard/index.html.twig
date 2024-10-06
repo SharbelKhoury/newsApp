@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .news-item {
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        .news-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .section-title {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .profile-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .profile-img{
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    {% block body %}
+    <div class="container">
+        <div class="row pt-5 mt-5">
+            <div class="col-md-12">
+                <h3>Welcome to your dashboard, {{ app.user.email }}!</h3>
+                <div class="profile-link">
+                    <a href="{# {{ path('app_profile') }} #}/">
+                        <img src="images/profile.png" alt="Profile" class="{# rounded-circle #}profile-img" width="50" height="50">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mt-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">News Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {# <li class="nav-item">
+                        <a class="nav-link" href="{{ path('/news') }}">Add News</a>
+                    </li> #}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('user_index') }}">Manage Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('tag_index') }}">Manage Tags</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('category_index') }}">Manage Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('language_index') }}">Specify Language</a>
+                    </li> 
+                   
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+
+            <!-- Latest News Section -->
+            <div class="col-md-4">
+                <div class="section-title">آخر الأخبار</div>
+                <div id="latest-news">
+                    {% for news in newsData.latest %}
+                        <div class="news-item">
+                            <h6>{{ news.title }}</h6>
+                            <small class="text-muted">{{ news.timestamp }}</small>
+                        </div>
+                    {% else %}
+                        <p>لا توجد أخبار حديثة حاليا.</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-8">
+                <!-- Politics Section -->
+                <div class="section-title">سياسة</div>
+                <div id="politics-news">
+                    {% for news in newsData.politics %}
+                        <div class="news-item">
+                            <img src="{{ news.image }}" alt="{{ news.title }}" class="news-image mb-2">
+                            <h5>{{ news.title }}</h5>
+                            <small class="text-muted">{{ news.timestamp }}</small>
+                        </div>
+                    {% else %}
+                        <p>لا توجد أخبار سياسية حاليا.</p>
+                    {% endfor %}
+                </div>
+
+                <!-- Economy Section -->
+                <div class="section-title mt-4">إقتصاد</div>
+                <div id="economy-news">
+                    {% for news in newsData.economy %}
+                        <div class="news-item">
+                            <img src="{{ news.image }}" alt="{{ news.title }}" class="news-image mb-2">
+                            <h5>{{ news.title }}</h5>
+                            <small class="text-muted">{{ news.timestamp }}</small>
+                        </div>
+                    {% else %}
+                        <p>لا توجد أخبار اقتصادية حاليا.</p>
+                    {% endfor %}
+                </div>
+
+                <!-- Security Section -->
+                <div class="section-title mt-4">أمن وقضاء</div>
+                <div id="security-news">
+                    {% for news in newsData.security %}
+                        <div class="news-item">
+                            <img src="{{ news.image }}" alt="{{ news.title }}" class="news-image mb-2">
+                            <h5>{{ news.title }}</h5>
+                            <small class="text-muted">{{ news.timestamp }}</small>
+                        </div>
+                    {% else %}
+                        <p>لا توجد أخبار أمنية حاليا.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
