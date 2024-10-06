@@ -10,10 +10,10 @@
         {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
         {{ form_errors(form.title) }}
     </div>
-
+    
     <div class="form-group">
         {{ form_label(form.description) }}
-        {{ form_widget(form.description, {'attr': {'class': 'form-control'}})}}
+        {{ form_widget(form.description, {'attr': {'class': 'form-control wysiwyg-editor'}}) }}
         {{ form_errors(form.description) }}
     </div>
 
@@ -62,19 +62,39 @@
 
     {{ form_end(form) }}
     </form>
-    {# <script>
+      <script>
         // WYSIWYG Editor Init (CKEditor Example)
-        ClassicEditor
-            .create(document.querySelector('.wysiwyg-editor'))
-            .catch(error => { console.error(error); });
+        //document.addEventListener('DOMContentLoaded', function() {
+            // Select all textareas that need CKEditor
+       //     const textareas = document.querySelectorAll('.wysiwyg-editor');
 
-        // Add more media functionality
+          //  textareas.forEach((textarea) => {
+          //      ClassicEditor
+          //          .create(textarea)
+          //          .then(editor => {
+           //             // Keep a reference to the editor instance
+           //             window.editor = editor;
+           //         })
+           //         .catch(error => {
+           //             console.error(error);
+           //         });
+          //  });
+        //});
+
+       {#  // Add more media functionality
         document.querySelector('.add-more').addEventListener('click', function() {
             const mediaUpload = document.querySelector('.media-upload');
             const mediaItem = document.createElement('div');
             mediaItem.classList.add('media-item');
             mediaItem.innerHTML = '<input type="file" name="media[]" class="form-control">';
             mediaUpload.appendChild(mediaItem);
-        });
-    </script> #}
+        }); #}
+
+       {#  // Remove media functionality
+        document.querySelectorAll('.remove-media').forEach(button => {
+            button.addEventListener('click', function() {
+                this.closest('.media-item').remove();
+            });
+        }); #}
+    </script>
 {% endblock %}

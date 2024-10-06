@@ -89,4 +89,39 @@
             });
         });
     </script> #}
+     <script>
+        // WYSIWYG Editor Init (CKEditor Example)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select all textareas that need CKEditor
+            const textareas = document.querySelectorAll('.wysiwyg-editor');
+
+            textareas.forEach((textarea) => {
+                ClassicEditor
+                    .create(textarea)
+                    .then(editor => {
+                        // Keep a reference to the editor instance
+                        window.editor = editor;
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            });
+        });
+
+        // Add more media functionality
+        document.querySelector('.add-more').addEventListener('click', function() {
+            const mediaUpload = document.querySelector('.media-upload');
+            const mediaItem = document.createElement('div');
+            mediaItem.classList.add('media-item');
+            mediaItem.innerHTML = '<input type="file" name="media[]" class="form-control">';
+            mediaUpload.appendChild(mediaItem);
+        });
+
+        // Remove media functionality
+        document.querySelectorAll('.remove-media').forEach(button => {
+            button.addEventListener('click', function() {
+                this.closest('.media-item').remove();
+            });
+        });
+    </script>
 {% endblock %}

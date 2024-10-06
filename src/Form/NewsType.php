@@ -21,7 +21,13 @@ class NewsType extends AbstractType
     {
         $builder
             ->add('title', TextType::class)
-            ->add('description', TextareaType::class)
+            ->add('description', TextAreaType::class, [
+                'attr' => [
+                    'class' => 'wysiwyg-editor',
+                    // Add class for CKEditor
+                ],
+                'required' => true,
+            ])
             ->add('images', FileType::class, [
                 'label' => 'Upload Images',
                 'multiple' => true, // Allow multiple file uploads
