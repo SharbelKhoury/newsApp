@@ -29,9 +29,36 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/dashboard, roles: ROLE_USER }
         - { path: ^/, roles: ROLE_USER }
-        - { path: ^/user, roles: ROLE_SUPER_ADMIN }
-        - { path: ^/news, roles: ROLE_NEWS_ENTRY }
+        #- { path: ^/user, roles: ROLE_SUPER_ADMIN }
+        #- { path: ^/news, roles: ROLE_NEWS_ENTRY }
         - { path: ^/api, roles: ROLE_USER }
+                # Public pages
+        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        # User Management
+        - { path: ^/user, roles: ROLE_SUPER_ADMIN }
+        - { path: ^/user, roles: ROLE_ADMIN }
+        - { path: ^/user, roles: ROLE_USER }
+
+        # News Management
+        - { path: ^/news, roles: ROLE_SUPER_ADMIN }
+        - { path: ^/news, roles: ROLE_ADMIN }
+        - { path: ^/news, roles: ROLE_USER }
+
+        # Categories Management
+        - { path: ^/categories, roles: ROLE_SUPER_ADMIN }
+        - { path: ^/categories, roles: ROLE_ADMIN }
+
+        # Tags Management
+        - { path: ^/tags, roles: ROLE_SUPER_ADMIN }
+        - { path: ^/tags, roles: ROLE_ADMIN }
+
+        # Languages Management
+        - { path: ^/languages, roles: ROLE_SUPER_ADMIN }
+
+        # Default deny
+        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
     role_hierarchy:
         ROLE_SUPER_ADMIN:       

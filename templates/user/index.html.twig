@@ -15,6 +15,7 @@
                         <img src="{{ asset('images/sync-logo.png') }}" alt="Logo" style="width: 100px;">
                     </div>
                     <ul class="nav flex-column">
+                            {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') %}                                     
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ path('category_index') }}">
                                 <i class="fas fa-th-large"></i>
@@ -27,18 +28,24 @@
                                 Tags
                             </a>
                         </li>
+                           {% endif %}         
+                         {% if is_granted('ROLE_USER') %}                      
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ path('news_index') }}">
                                 <i class="fas fa-newspaper"></i>
                                 News
                             </a>
                         </li>
+                       {% endif %}
+                       {% if is_granted('ROLE_SUPER_ADMIN') %}                             
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ path('language_index') }}">
                                 <i class="fas fa-globe"></i>
                                 Languages
                             </a>
                         </li>
+                        {% endif %}    
+                        {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_ADMIN') %}
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ path('user_index') }}">
                                 <i class="fas fa-users"></i>
@@ -52,6 +59,7 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
                     </ul>
                 </div>
             </nav>
