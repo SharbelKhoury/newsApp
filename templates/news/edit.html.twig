@@ -3,7 +3,7 @@
 {% block body %}
     <h1>Edit News Entry</h1>
 
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
 
     <div class="form-group">
         {{ form_label(form.title) }}
@@ -12,33 +12,62 @@
     </div>
 
     <div class="form-group">
-        {{ form_label(form.content) }}
-        <textarea class="form-control wysiwyg-editor" name="content">{{ form.vars.value.content }}</textarea>
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description, {'attr': {'class': 'form-control wysiwyg-editor'}}) }}
+        {{ form_errors(form.description) }}
+    </div>
+<div class="form-group">
+        {{ form_label(form.images) }}
+        {{ form_widget(form.images, {'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.images) }}
     </div>
 
     <div class="form-group">
-        <label>Media</label>
+        {{ form_label(form.customDate) }}
+        {{ form_widget(form.customDate, {'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.customDate) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.category) }}
+        {{ form_widget(form.category, {'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.category) }}
+    </div>
+    
+    <div class="form-group">
+        {{ form_label(form.tags) }}
+        {{ form_widget(form.tags, {'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.tags) }}
+    </div>
+
+      <div class="form-group">
+        {{ form_label(form.author) }}
+        {{ form_widget(form.author, {'attr': {'class': 'form-control'}})}}
+        {{ form_errors(form.author) }}
+    </div>
+    {# <div class="form-group">
+        <label>Upload Images</label>
         <div class="media-upload">
-            {% for media in form.vars.value.media %}
+            {% for media in form.vars.value.images %}
                 <div class="media-item">
-                    <input type="file" name="media[]" class="form-control">
-                    <img src="{{ media.path }}" alt="Existing Image" class="img-thumbnail" style="max-width: 150px;">
+                    <input type="file" name="images[]" class="form-control">
+                    <img src="{{ asset(media.path) }}" alt="Existing Image" class="img-thumbnail" style="max-width: 150px;">
                     <button type="button" class="btn btn-danger remove-media">Remove</button>
                 </div>
             {% else %}
                 <div class="media-item">
-                    <input type="file" name="media[]" class="form-control">
+                    <input type="file" name="images[]" class="form-control">
                 </div>
             {% endfor %}
         </div>
-        <button type="button" class="btn btn-secondary add-more">Add More</button>
+        <button type="button" class="btn btn-secondary add-more">Add More</button> #}
     </div>
 
     <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
 
     {{ form_end(form) }}
 
-    <script>
+ {#    <script>
         // WYSIWYG Editor Init (CKEditor Example)
         ClassicEditor
             .create(document.querySelector('.wysiwyg-editor'))
@@ -49,7 +78,7 @@
             const mediaUpload = document.querySelector('.media-upload');
             const mediaItem = document.createElement('div');
             mediaItem.classList.add('media-item');
-            mediaItem.innerHTML = '<input type="file" name="media[]" class="form-control">';
+            mediaItem.innerHTML = '<input type="file" name="images[]" class="form-control">';
             mediaUpload.appendChild(mediaItem);
         });
 
@@ -59,5 +88,5 @@
                 this.closest('.media-item').remove();
             });
         });
-    </script>
+    </script> #}
 {% endblock %}

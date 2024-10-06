@@ -104,11 +104,18 @@
             <div class="form-group">
                 <input type="password" name="password" id="inputPassword" placeholder="Password" autocomplete="current-password" required>
             </div>
-
+                
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
             <button type="submit">Sign In</button>
+            <br>
+
+            
+            
         </form>
+    <div class="form-group pt-5 mt-5 ms-5">
+                <a class="pull-right" style="margin-top:20px;" href="{{ path('app_register') }}">Sign Up</a>
+            </div>
     </div>
 </div>
 {% endblock %}

@@ -35,44 +35,66 @@ class NewsControllerAPI extends AbstractController
     #[Route('/add', name: 'news_add', methods: ['POST'])]
     public function add(Request $request): Response
     {
+        // Create a new News entity instance
         $news = new News();
+
+        // Create the form
         $form = $this->createForm(NewsType::class, $news);
+
+        // Handle the request
         $form->handleRequest($request);
 
+        // Debug: Check if form is submitted
+        dump('Form submitted: ', $form->isSubmitted());
+
+        // Debug: Check if form is valid
+        dump('Form valid: ', $form->isValid());
+
         if ($form->isSubmitted() && $form->isValid()) {
+            // Handle image uploads
             $images = $form->get('images')->getData();
-            $imagePaths = []; // Initialize an array to store image paths
+
+            // Initialize an array to hold image paths
+            $imagePaths = [];
 
             if ($images) {
                 foreach ($images as $image) {
+                    // Get the original file name and generate a unique filename
                     $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
                     $newFilename = uniqid() . '.' . $image->guessExtension();
 
                     // Move the file to the directory where images are stored
                     try {
                         $image->move(
-                            $this->getParameter('images_directory'), // Use the parameter for the directory
+                            $this->getParameter('images_directory'), // Set this parameter in services.yaml
                             $newFilename
                         );
-                        // Add the path to the array (store the relative path)
-                        $imagePaths[] = '/uploads/images/' . $newFilename; // Adjust the path based on your setup
+                        // Add the new filename to the image paths array
+                        $imagePaths[] = $newFilename;
                     } catch (FileException $e) {
                         // Handle exception if something happens during file upload
-                        // Optionally log the error or show a flash message
+                        dump('File upload error: ', $e->getMessage());
                     }
                 }
+                // Set the images in the News entity (assuming images is a string array)
+                $news->setImages($imagePaths);
             }
 
-            // Store the image paths in the News entity
-            $news->setImages($imagePaths); // Assuming setImages accepts an array of paths
-
-            // Persist the $news entity
+            // Persist the news entity
             $this->entityManager->persist($news);
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('news_index');
+            // Debug: Log success message
+            dump('News item saved successfully.');
+
+            // Redirect response
+            return $this->json(['redirect' => $this->generateUrl('news_index')]);
         }
 
+        // Debug: Log form errors if the form is not valid
+        dump('Form errors:', $form->getErrors(true, false));
+
+        // Render the form view in case of error or invalid submission
         return $this->render('news/add.html.twig', [
             'form' => $form->createView(),
         ]);

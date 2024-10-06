@@ -25,18 +25,7 @@ class NewsType extends AbstractType
             ->add('images', FileType::class, [
                 'label' => 'Upload Images',
                 'multiple' => true, // Allow multiple file uploads
-                'mapped' => false, // Not mapped to an entity field directly
-                'constraints' => [
-                    new File([
-                        'maxSize' => '5M', // Limit size to 5MB
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png',
-                            'image/gif',
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid image file (JPEG, PNG, GIF).',
-                    ])
-                ],
+                'mapped' => false, // If you are handling file uploads manually
             ])
             ->add('customDate')
             ->add('category', EntityType::class, [

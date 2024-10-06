@@ -2,8 +2,8 @@
 
 {% block body %}
     <h1>Create News Entry</h1>
-
-    {{ form_start(form, {'data-turbo': 'true'}) }}
+ <form method="post" action="{{ path('news_add') }}">
+    {{ form_start(form, {'attr': {'data-turbo-action': 'replace', 'enctype': 'multipart/form-data'}}) }}
     
     <div class="form-group">
         {{ form_label(form.title) }}
@@ -13,37 +13,37 @@
 
     <div class="form-group">
         {{ form_label(form.description) }}
-        {{ form_widget(form.description)}}
+        {{ form_widget(form.description, {'attr': {'class': 'form-control'}})}}
         {{ form_errors(form.description) }}
     </div>
 
     <div class="form-group">
         {{ form_label(form.images) }}
-        {{ form_widget(form.images)}}
+        {{ form_widget(form.images, {'attr': {'class': 'form-control'}})}}
         {{ form_errors(form.images) }}
     </div>
 
     <div class="form-group">
         {{ form_label(form.customDate) }}
-        {{ form_widget(form.customDate)}}
+        {{ form_widget(form.customDate, {'attr': {'class': 'form-control'}})}}
         {{ form_errors(form.customDate) }}
     </div>
 
     <div class="form-group">
         {{ form_label(form.category) }}
-        {{ form_widget(form.category)}}
+        {{ form_widget(form.category, {'attr': {'class': 'form-control'}})}}
         {{ form_errors(form.category) }}
     </div>
     
     <div class="form-group">
         {{ form_label(form.tags) }}
-        {{ form_widget(form.tags)}}
+        {{ form_widget(form.tags, {'attr': {'class': 'form-control'}})}}
         {{ form_errors(form.tags) }}
     </div>
 
       <div class="form-group">
         {{ form_label(form.author) }}
-        {{ form_widget(form.author)}}
+        {{ form_widget(form.author, {'attr': {'class': 'form-control'}})}}
         {{ form_errors(form.author) }}
     </div>
 
@@ -57,10 +57,11 @@
         <button type="button" class="btn btn-secondary add-more">Add More</button>
     </div> #}
 
-    <button  type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+    <button type="submit" class="btn btn-primary">Add News</button>
+    <a href="{{ path('news_index') }}" class="btn btn-secondary ms-2">Cancel</a>
 
     {{ form_end(form) }}
-
+    </form>
     {# <script>
         // WYSIWYG Editor Init (CKEditor Example)
         ClassicEditor

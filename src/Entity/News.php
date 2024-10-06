@@ -11,6 +11,7 @@ use App\Entity\User;
 use App\Entity\Tag;
 use App\Entity\Category;
 use Symfony\Component\Serializer\Annotation\Groups;
+use DateTime;
 
 #[ORM\Entity(repositoryClass: NewsRepository::class)]
 class News
@@ -52,9 +53,20 @@ class News
     #[Groups(['news:read'])]
     private ?User $author = null;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->createdAt = new DateTime();
+    }
+
+    public function getCreatedAt(): ?DateTime
+    {
+        return $this->createdAt;
     }
 
     #[Groups(['news:read'])]
