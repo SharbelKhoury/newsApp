@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\CategoryRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups; // Import the Groups annotation
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
@@ -13,15 +13,15 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['category:read'])] // Add serialization group
+    #[Groups(['category:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['category:read'])] // Add serialization group
+    #[Groups(['category:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['category:read'])] // Add serialization group
+    #[Groups(['category:read'])]
     private ?string $description = null;
 
     #[ORM\OneToMany(targetEntity: News::class, mappedBy: 'category')]
@@ -30,7 +30,7 @@ class Category
     /**
      * @return mixed
      */
-    #[Groups(['category:read'])] // Add serialization group
+    #[Groups(['category:read'])]
     public function getNews()
     {
         return $this->news;
@@ -44,7 +44,12 @@ class Category
         $this->news = $news;
     }
 
-    #[Groups(['category:read'])] // Add serialization group
+    public function __toString()
+    {
+        return $this->title;
+    }
+
+    #[Groups(['category:read'])]
     public function getId(): ?int
     {
         return $this->id;
@@ -57,7 +62,7 @@ class Category
         return $this;
     }
 
-    #[Groups(['category:read'])] // Add serialization group
+    #[Groups(['category:read'])]
     public function getTitle(): ?string
     {
         return $this->title;
@@ -70,7 +75,7 @@ class Category
         return $this;
     }
 
-    #[Groups(['category:read'])] // Add serialization group
+    #[Groups(['category:read'])]
     public function getDescription(): ?string
     {
         return $this->description;

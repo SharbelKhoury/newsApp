@@ -5,10 +5,12 @@ namespace App\Entity;
 use App\Repository\NewsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use App\Entity\User;
 use App\Entity\Tag;
 use App\Entity\Category;
-use Symfony\Component\Serializer\Annotation\Groups; // Import the Groups annotation
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: NewsRepository::class)]
 class News
@@ -16,91 +18,46 @@ class News
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['news:read'])] // Add serialization group
+    #[Groups(['news:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['news:read'])] // Add serialization group
+    #[Groups(['news:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['news:read'])] // Add serialization group
+    #[Groups(['news:read'])]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['news:read'])] // Add serialization group
+    #[Groups(['news:read'])]
     private ?array $images = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['news:read'])] // Add serialization group
+    #[Groups(['news:read'])]
     private ?\DateTimeInterface $customDate = null;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'news')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['news:read'])] // Add serialization group
-    private $category;
+    #[Groups(['news:read'])]
+    private ?Category $category = null;
 
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'news')]
-    #[Groups(['news:read'])] // Add serialization group
-    private $tags;
+    #[ORM\JoinTable(name: "news_tags")]
+    #[Groups(['news:read'])]
+    private Collection $tags;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['news:read'])] // Add serialization group
-    private $author;
+    #[Groups(['news:read'])]
+    private ?User $author = null;
 
-    /**
-     * @return mixed
-     */
-    #[Groups(['news:read'])] // Add serialization group
-    public function getCategory()
+    public function __construct()
     {
-        return $this->category;
+        $this->tags = new ArrayCollection();
     }
 
-    /**
-     * @param mixed $category
-     */
-    public function setCategory($category): void
-    {
-        $this->category = $category;
-    }
-
-    /**
-     * @return mixed
-     */
-    #[Groups(['news:read'])] // Add serialization group
-    public function getTags()
-    {
-        return $this->tags;
-    }
-
-    /**
-     * @param mixed $tags
-     */
-    public function setTags($tags): void
-    {
-        $this->tags = $tags;
-    }
-
-    /**
-     * @return mixed
-     */
-    #[Groups(['news:read'])] // Add serialization group
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * @param mixed $author
-     */
-    public function setAuthor($author): void
-    {
-        $this->author = $author;
-    }
-
-    #[Groups(['news:read'])] // Add serialization group
+    #[Groups(['news:read'])]
     public function getId(): ?int
     {
         return $this->id;
@@ -109,11 +66,10 @@ class News
     public function setId(int $id): static
     {
         $this->id = $id;
-
         return $this;
     }
 
-    #[Groups(['news:read'])] // Add serialization group
+    #[Groups(['news:read'])]
     public function getTitle(): ?string
     {
         return $this->title;
@@ -122,11 +78,10 @@ class News
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
         return $this;
     }
 
-    #[Groups(['news:read'])] // Add serialization group
+    #[Groups(['news:read'])]
     public function getDescription(): ?string
     {
         return $this->description;
@@ -135,11 +90,10 @@ class News
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
-    #[Groups(['news:read'])] // Add serialization group
+    #[Groups(['news:read'])]
     public function getImages(): ?array
     {
         return $this->images;
@@ -148,11 +102,10 @@ class News
     public function setImages(?array $images): static
     {
         $this->images = $images;
-
         return $this;
     }
 
-    #[Groups(['news:read'])] // Add serialization group
+    #[Groups(['news:read'])]
     public function getCustomDate(): ?\DateTimeInterface
     {
         return $this->customDate;
@@ -161,7 +114,50 @@ class News
     public function setCustomDate(\DateTimeInterface $customDate): static
     {
         $this->customDate = $customDate;
+        return $this;
+    }
 
+    #[Groups(['news:read'])]
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(Category $category): static
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    #[Groups(['news:read'])]
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): static
+    {
+        $this->tags->removeElement($tag);
+        return $this;
+    }
+
+    #[Groups(['news:read'])]
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(User $author): static
+    {
+        $this->author = $author;
         return $this;
     }
 }

@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/api/news')]
 class NewsControllerAPI extends AbstractController
@@ -34,18 +35,47 @@ class NewsControllerAPI extends AbstractController
     #[Route('/add', name: 'news_add', methods: ['POST'])]
     public function add(Request $request): Response
     {
-        $newsItem = new News();
-        $form = $this->createForm(NewsType::class, $newsItem);
+        $news = new News();
+        $form = $this->createForm(NewsType::class, $news);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($newsItem);
+            $images = $form->get('images')->getData();
+            $imagePaths = []; // Initialize an array to store image paths
+
+            if ($images) {
+                foreach ($images as $image) {
+                    $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                    $newFilename = uniqid() . '.' . $image->guessExtension();
+
+                    // Move the file to the directory where images are stored
+                    try {
+                        $image->move(
+                            $this->getParameter('images_directory'), // Use the parameter for the directory
+                            $newFilename
+                        );
+                        // Add the path to the array (store the relative path)
+                        $imagePaths[] = '/uploads/images/' . $newFilename; // Adjust the path based on your setup
+                    } catch (FileException $e) {
+                        // Handle exception if something happens during file upload
+                        // Optionally log the error or show a flash message
+                    }
+                }
+            }
+
+            // Store the image paths in the News entity
+            $news->setImages($imagePaths); // Assuming setImages accepts an array of paths
+
+            // Persist the $news entity
+            $this->entityManager->persist($news);
             $this->entityManager->flush();
 
-            return $this->json($newsItem, Response::HTTP_CREATED);
+            return $this->redirectToRoute('news_index');
         }
 
-        return $this->json(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST);
+        return $this->render('news/add.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     #[Route('/{id}', name: 'news_edit', methods: ['PUT'])]

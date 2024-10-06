@@ -1,86 +1,79 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar (left) -->
-        <nav id="sidebar" class="col-md-2 d-md-block bg-dark sidebar">
-            <div class="position-sticky pt-3">
-                <div class="sidebar-logo p-3 text-center">
-                    <img src="/images/sync-logo.png" alt="Logo" style="width: 100px;">
-                </div>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">
-                            <i class="fas fa-th-large"></i>
-                            Categories
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">
-                            <i class="fas fa-tags"></i>
-                            Tags
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">
-                            <i class="fas fa-newspaper"></i>
-                            News
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">
-                            <i class="fas fa-globe"></i>
-                            Languages
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">
-                            <i class="fas fa-users"></i>
-                            User Management
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+    <h1>Create News Entry</h1>
 
-        <!-- Main Content (right) -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="d-flex justify-content-between align-items-center mt-3">
-                <div>
-                    <h4>Add News</h4>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item"><a href="#">News</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Add News</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-
-            <!-- Add News Form -->
-            <div class="mt-4">
-                <form method="post" action="{{ path('news_add') }}">
-                    {{ form_start(form) }}
-                    <div class="mb-3">
-                        {{ form_label(form.title) }}
-                        {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
-                        {{ form_errors(form.title) }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form_label(form.content) }}
-                        {{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
-                        {{ form_errors(form.content) }}
-                    </div>
-                    <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary">Add News</button>
-                        <a href="{{ path('news_index') }}" class="btn btn-secondary ms-2">Cancel</a>
-                    </div>
-                    {{ form_end(form) }}
-                </form>
-            </div>
-        </main>
+    {{ form_start(form, {'data-turbo': 'true'}) }}
+    
+    <div class="form-group">
+        {{ form_label(form.title) }}
+        {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.title) }}
     </div>
-</div>
+
+    <div class="form-group">
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description)}}
+        {{ form_errors(form.description) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.images) }}
+        {{ form_widget(form.images)}}
+        {{ form_errors(form.images) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.customDate) }}
+        {{ form_widget(form.customDate)}}
+        {{ form_errors(form.customDate) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.category) }}
+        {{ form_widget(form.category)}}
+        {{ form_errors(form.category) }}
+    </div>
+    
+    <div class="form-group">
+        {{ form_label(form.tags) }}
+        {{ form_widget(form.tags)}}
+        {{ form_errors(form.tags) }}
+    </div>
+
+      <div class="form-group">
+        {{ form_label(form.author) }}
+        {{ form_widget(form.author)}}
+        {{ form_errors(form.author) }}
+    </div>
+
+   {#  <div class="form-group">
+        <label>Media</label>
+        <div class="media-upload">
+            <div class="media-item">
+                <input type="file" name="media[]" class="form-control">
+            </div>
+        </div>
+        <button type="button" class="btn btn-secondary add-more">Add More</button>
+    </div> #}
+
+    <button  type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+
+    {{ form_end(form) }}
+
+    {# <script>
+        // WYSIWYG Editor Init (CKEditor Example)
+        ClassicEditor
+            .create(document.querySelector('.wysiwyg-editor'))
+            .catch(error => { console.error(error); });
+
+        // Add more media functionality
+        document.querySelector('.add-more').addEventListener('click', function() {
+            const mediaUpload = document.querySelector('.media-upload');
+            const mediaItem = document.createElement('div');
+            mediaItem.classList.add('media-item');
+            mediaItem.innerHTML = '<input type="file" name="media[]" class="form-control">';
+            mediaUpload.appendChild(mediaItem);
+        });
+    </script> #}
 {% endblock %}

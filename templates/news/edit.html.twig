@@ -1,58 +1,63 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit News{% endblock %}
-
 {% block body %}
-<div class="container">
-    <h2 class="mt-5">Edit News</h2>
-    <div class="card mt-4 p-4">
-        {{ form_start(form) }}
-        
-        <div class="form-group mb-3">
-            {{ form_label(form.title, 'Title', {'label_attr': {'class': 'form-label'}}) }}
-            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.title) }}
-        </div>
+    <h1>Edit News Entry</h1>
 
-        <div class="form-group mb-3">
-            {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
-            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.description) }}
-        </div>
+    {{ form_start(form) }}
 
-        <div class="form-group mb-3">
-            {{ form_label(form.images, 'Images', {'label_attr': {'class': 'form-label'}}) }}
-            {{ form_widget(form.images, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.images) }}
-        </div>
-
-        <div class="form-group mb-3">
-            {{ form_label(form.customDate, 'Custom Date', {'label_attr': {'class': 'form-label'}}) }}
-            {{ form_widget(form.customDate, {'attr': {'class': 'form-control'}}) }}
-            {{ form_errors(form.customDate) }}
-        </div>
-
-        <div class="form-group mb-3">
-            {{ form_label(form.category, 'Category', {'label_attr': {'class': 'form-label'}}) }}
-            {{ form_widget(form.category, {'attr': {'class': 'form-select'}}) }}
-            {{ form_errors(form.category) }}
-        </div>
-
-        <div class="form-group mb-3">
-            {{ form_label(form.tags, 'Tags', {'label_attr': {'class': 'form-label'}}) }}
-            {{ form_widget(form.tags, {'attr': {'class': 'form-select'}}) }}
-            {{ form_errors(form.tags) }}
-        </div>
-
-        <div class="form-group mb-3">
-            {{ form_label(form.author, 'Author', {'label_attr': {'class': 'form-label'}}) }}
-            {{ form_widget(form.author, {'attr': {'class': 'form-select'}}) }}
-            {{ form_errors(form.author) }}
-        </div>
-
-        <button type="submit" class="btn btn-primary">Save</button>
-        
-        {{ form_end(form) }}
+    <div class="form-group">
+        {{ form_label(form.title) }}
+        {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.title) }}
     </div>
-</div>
+
+    <div class="form-group">
+        {{ form_label(form.content) }}
+        <textarea class="form-control wysiwyg-editor" name="content">{{ form.vars.value.content }}</textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Media</label>
+        <div class="media-upload">
+            {% for media in form.vars.value.media %}
+                <div class="media-item">
+                    <input type="file" name="media[]" class="form-control">
+                    <img src="{{ media.path }}" alt="Existing Image" class="img-thumbnail" style="max-width: 150px;">
+                    <button type="button" class="btn btn-danger remove-media">Remove</button>
+                </div>
+            {% else %}
+                <div class="media-item">
+                    <input type="file" name="media[]" class="form-control">
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" class="btn btn-secondary add-more">Add More</button>
+    </div>
+
+    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+
+    {{ form_end(form) }}
+
+    <script>
+        // WYSIWYG Editor Init (CKEditor Example)
+        ClassicEditor
+            .create(document.querySelector('.wysiwyg-editor'))
+            .catch(error => { console.error(error); });
+
+        // Add more media functionality
+        document.querySelector('.add-more').addEventListener('click', function() {
+            const mediaUpload = document.querySelector('.media-upload');
+            const mediaItem = document.createElement('div');
+            mediaItem.classList.add('media-item');
+            mediaItem.innerHTML = '<input type="file" name="media[]" class="form-control">';
+            mediaUpload.appendChild(mediaItem);
+        });
+
+        // Remove media functionality
+        document.querySelectorAll('.remove-media').forEach(button => {
+            button.addEventListener('click', function() {
+                this.closest('.media-item').remove();
+            });
+        });
+    </script>
 {% endblock %}

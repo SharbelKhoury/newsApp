@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TagRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups; // Import the Groups annotation
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TagRepository::class)]
 class Tag
@@ -12,11 +12,11 @@ class Tag
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['tag:read'])] // Add serialization group
+    #[Groups(['tag:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['tag:read'])] // Add serialization group
+    #[Groups(['tag:read'])]
     private ?string $title = null;
 
     #[ORM\ManyToMany(targetEntity: News::class, mappedBy: 'tags')]
@@ -25,7 +25,7 @@ class Tag
     /**
      * @return mixed
      */
-    #[Groups(['tag:read'])] // Add serialization group
+    #[Groups(['tag:read'])]
     public function getNews()
     {
         return $this->news;
@@ -39,7 +39,7 @@ class Tag
         $this->news = $news;
     }
 
-    #[Groups(['tag:read'])] // Add serialization group
+    #[Groups(['tag:read'])]
     public function getId(): ?int
     {
         return $this->id;
@@ -52,7 +52,13 @@ class Tag
         return $this;
     }
 
-    #[Groups(['tag:read'])] // Add serialization group
+    public function __toString()
+    {
+        return $this->title;
+    }
+
+
+    #[Groups(['tag:read'])]
     public function getTitle(): ?string
     {
         return $this->title;
